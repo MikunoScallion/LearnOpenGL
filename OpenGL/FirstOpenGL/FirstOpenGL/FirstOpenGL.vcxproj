@@ -29,12 +29,14 @@
     <ClInclude Include="stb_image.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="shader.fs">
+    <None Include="light_shader.fs" />
+    <None Include="box_shader.fs">
       <FileType>Document</FileType>
     </None>
-    <None Include="shader.vs">
+    <None Include="box_shader.vs">
       <FileType>Document</FileType>
     </None>
+    <None Include="light_shader.vs" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="awesomeface.png" />
@@ -95,6 +97,10 @@
     <IncludePath>D:\Documents\GitLab\jtian_unity\OpenGL\FirstOpenGL\FirstOpenGL;D:\Software\glm;D:\Software\glfw-3.3\include;$(IncludePath)</IncludePath>
     <LibraryPath>D:\Software\glfw-3.3\build\src\Debug;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>D:\Documents\GitLab\jtian_unity\OpenGL\FirstOpenGL\FirstOpenGL;D:\Software\glfw-3.3\include;D:\Software\glm;$(IncludePath)</IncludePath>
+    <LibraryPath>D:\Software\glfw-3.3\build\src\Debug;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -114,6 +120,12 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
+    <Link>
+      <AdditionalDependencies>opengl32.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>
+      </AdditionalLibraryDirectories>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
