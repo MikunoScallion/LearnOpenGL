@@ -155,6 +155,9 @@ int main()
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
 
+		lightPos.x = sin(glfwGetTime()) * 2.0f;
+		lightPos.z = cos(glfwGetTime()) * 2.0f;
+
 		boxShader.use();
 		boxShader.setVec3("objectColor", 1.0f, 0.5f, 0.31f);
 		boxShader.setVec3("lightColor", 1.0f, 1.0f, 1.0f);

@@ -1,12 +1,8 @@
 #version 330 core
-layout (location = 0) in vec3 aPos;
-layout (location = 1) in vec3 aNormal;
-  
-out vec3 result;
+out vec4 FragColor;
 
-uniform mat4 model;
-uniform mat4 view;
-uniform mat4 projection;
+in vec3 Normal;
+in vec3 FragPos;
 
 uniform vec3 objectColor;
 uniform vec3 lightColor;
@@ -15,11 +11,6 @@ uniform vec3 viewPos;
 
 void main()
 {
-	FragPos = vec3(model * vec4(aPos, 1.0));
-	Normal = mat3(transpose(inverse(model))) * aNormal;
-
-    gl_Position = projection * view * vec4(FragPos, 1.0);
-
 	float specularStrength = 1.5;
 	float ambientStrength = 0.1;
 
@@ -37,4 +28,6 @@ void main()
 	vec3 specular = specularStrength * spec * lightColor;
 	
 	vec3 result = (ambient + diffuse + specular) * objectColor;
+	FragColor = vec4(result, 1.0);
+	
 }
