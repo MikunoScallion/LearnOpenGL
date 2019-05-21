@@ -16,7 +16,7 @@ void processInput(GLFWwindow *window);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 
-glm::vec3 lightPos(0.2f, 0.0f, 2.0f);
+glm::vec3 lightPos(0.1f, 0.0f, 2.0f);
 
 // settings
 const unsigned int SCR_WIDTH = 800;
@@ -159,8 +159,24 @@ int main()
 		//lightPos.z = cos(glfwGetTime()) * 2.0f;
 
 		boxShader.use();
-		boxShader.setVec3("objectColor", 1.0f, 0.5f, 0.31f);
-		boxShader.setVec3("lightColor", 1.0f, 1.0f, 1.0f);
+
+		boxShader.setVec3("material.ambient", 0.24725, 0.1995, 0.0745);
+		boxShader.setVec3("material.diffuse", 0.75164, 0.60648, 0.22648);
+		boxShader.setVec3("material.specular", 0.628281, 0.555802, 0.366065);
+		boxShader.setFloat("material.shininess", 0.4*128);
+
+		//glm::vec3 lightColor;
+		//lightColor.x = sin(glfwGetTime() * 2.0f);
+		//lightColor.y = sin(glfwGetTime() * 0.7f);
+		//lightColor.z = sin(glfwGetTime() * 1.3f);
+
+		//glm::vec3 diffuseColor = lightColor * glm::vec3(0.5f); 
+		//glm::vec3 ambientColor = diffuseColor * glm::vec3(0.2f);
+
+		boxShader.setVec3("light.ambient", 1.0f, 1.0f, 1.0f);
+		boxShader.setVec3("light.diffuse", 1.0f, 1.0f, 1.0f);
+		boxShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
+
 		boxShader.setVec3("lightPos", lightPos);
 		boxShader.setVec3("viewPos", camera.Position);
 

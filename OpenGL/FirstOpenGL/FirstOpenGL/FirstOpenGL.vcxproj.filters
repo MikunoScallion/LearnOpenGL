@@ -37,16 +37,16 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="box_shader.fs">
+    <None Include="box_vs.glsl">
       <Filter>Source Files</Filter>
     </None>
-    <None Include="box_shader.vs">
+    <None Include="box_fs.glsl">
       <Filter>Source Files</Filter>
     </None>
-    <None Include="light_shader.fs">
+    <None Include="light_fs.glsl">
       <Filter>Source Files</Filter>
     </None>
-    <None Include="light_shader.vs">
+    <None Include="light_vs.glsl">
       <Filter>Source Files</Filter>
     </None>
   </ItemGroup>
@@ -55,6 +55,12 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="awesomeface.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="container_diffuse.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="container_specular.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>
