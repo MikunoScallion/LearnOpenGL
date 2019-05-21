@@ -4,7 +4,6 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#include <math.h>
 
 #include <shader.h> 
 #include <camera.h> 
@@ -20,8 +19,8 @@ unsigned int loadTexture(const char *path);
 glm::vec3 lightPos(0.0f, 0.0f, 2.0f);
 
 // settings
-const unsigned int SCR_WIDTH = 800;
-const unsigned int SCR_HEIGHT = 600;
+const float SCR_WIDTH = 800;
+const float SCR_HEIGHT = 600;
 
 Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
 float lastX = SCR_WIDTH / 2.0f;
@@ -59,6 +58,8 @@ int main()
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 	glfwSetCursorPosCallback(window, mouse_callback);
 	glfwSetScrollCallback(window, scroll_callback);
+
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 	// glad: load all OpenGL function pointers
 	// ---------------------------------------
@@ -181,14 +182,13 @@ int main()
 		boxShader.setVec3("light.ambient", 0.2f, 0.2f, 0.2f);
 		boxShader.setVec3("light.diffuse", 0.5f, 0.5f, 0.5f);
 		boxShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
-		boxShader.setVec3("light.position", lightPos);
 
-		boxShader.setVec3("lightPos", lightPos);
+		boxShader.setVec3("light.position", lightPos);
 		boxShader.setVec3("viewPos", camera.Position);
 
-		glm::mat4 projection = glm::mat4(1.0f);
+		glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), SCR_WIDTH / SCR_HEIGHT, 0.1f, 100.0f);
 		glm::mat4 view = camera.GetViewMatrix();
-		projection = glm::perspective(glm::radians(camera.Zoom), float(SCR_WIDTH / SCR_HEIGHT), 0.1f, 100.0f);
+		
 		boxShader.setMat4("projection", projection);
 		boxShader.setMat4("view", view);
 
@@ -218,6 +218,7 @@ int main()
 	// optional: de-allocate all resources once they've outlived their purpose:
 	// ------------------------------------------------------------------------
 	glDeleteVertexArrays(1, &VAO);
+	glDeleteVertexArrays(1, &lightVAO);
 	glDeleteBuffers(1, &VBO);
 
 	// glfw: terminate, clearing all previously allocated GLFW resources.
@@ -243,15 +244,6 @@ void processInput(GLFWwindow *window)
 		camera.ProcessKeyboard(LEFT, deltaTime);
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
 		camera.ProcessKeyboard(RIGHT, deltaTime);
-
-	if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
-		percent += 0.01f;
-		if (percent > 1) percent = 1;
-	}
-	if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
-		percent -= 0.01f;
-		if (percent < 0) percent = 0;
-	}
 }
 
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes

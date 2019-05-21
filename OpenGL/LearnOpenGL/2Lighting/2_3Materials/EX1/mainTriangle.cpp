@@ -19,8 +19,8 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 glm::vec3 lightPos(0.1f, 0.0f, 2.0f);
 
 // settings
-const unsigned int SCR_WIDTH = 800;
-const unsigned int SCR_HEIGHT = 600;
+const float SCR_WIDTH = 800;
+const float SCR_HEIGHT = 600;
 
 Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
 float lastX = SCR_WIDTH / 2.0f;
@@ -182,7 +182,7 @@ int main()
 
 		glm::mat4 projection = glm::mat4(1.0f);
 		glm::mat4 view = camera.GetViewMatrix();
-		projection = glm::perspective(glm::radians(camera.Zoom), float(SCR_WIDTH / SCR_HEIGHT), 0.1f, 100.0f);
+		projection = glm::perspective(glm::radians(camera.Zoom), SCR_WIDTH / SCR_HEIGHT, 0.1f, 100.0f);
 		boxShader.setMat4("projection", projection);
 		boxShader.setMat4("view", view);
 
