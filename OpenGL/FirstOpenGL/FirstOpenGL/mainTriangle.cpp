@@ -123,6 +123,19 @@ int main()
 		-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f
 	};
 
+	glm::vec3 cubePositions[] = {
+	glm::vec3(0.0f,  0.0f,  0.0f),
+	glm::vec3(2.0f,  5.0f, -15.0f),
+	glm::vec3(-1.5f, -2.2f, -2.5f),
+	glm::vec3(-3.8f, -2.0f, -12.3f),
+	glm::vec3(2.4f, -0.4f, -3.5f),
+	glm::vec3(-1.7f,  3.0f, -7.5f),
+	glm::vec3(1.3f, -2.0f, -2.5f),
+	glm::vec3(1.5f,  2.0f, -2.5f),
+	glm::vec3(1.5f,  0.2f, -1.5f),
+	glm::vec3(-1.3f,  1.0f, -1.5f)
+	};
+
 	unsigned int VBO, VAO;
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
@@ -145,12 +158,10 @@ int main()
 
 	unsigned int diffuseMap = loadTexture("container_diffuse.png");
 	unsigned int specularMap = loadTexture("container_specular.png");
-	unsigned int emissionMap = loadTexture("container_emission.jpg");
 
 	boxShader.use();
 	boxShader.setInt("material.diffuse", 0);
 	boxShader.setInt("material.specular", 1);
-	boxShader.setInt("material.emission", 2);
 
 	// render loop
 	// -----------
@@ -178,16 +189,21 @@ int main()
 		glBindTexture(GL_TEXTURE_2D, diffuseMap);
 		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_2D, specularMap);
-		glActiveTexture(GL_TEXTURE2);
-		glBindTexture(GL_TEXTURE_2D, emissionMap);
-
 		boxShader.setFloat("material.shininess", 0.4*128);
 
 		boxShader.setVec3("light.ambient", 0.2f, 0.2f, 0.2f);
 		boxShader.setVec3("light.diffuse", 0.5f, 0.5f, 0.5f);
 		boxShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
 
-		boxShader.setVec3("light.position", lightPos);
+		//boxShader.setVec3("light.direction", -0.2f, -1.0f, -0.3f);
+		boxShader.setVec3("light.position", camera.Position);
+		boxShader.setVec3("light.direction", camera.Front);
+		boxShader.setFloat("light.cutOff", glm::cos(glm::radians(12.5f)));
+		boxShader.setFloat("light.outerCutOff", glm::cos(glm::radians(17.5f)));
+		//boxShader.setFloat("light.constant", 1.0f);
+		//boxShader.setFloat("light.linear", 0.09f);
+		//boxShader.setFloat("light.quadratic", 0.032f);
+
 		boxShader.setVec3("viewPos", camera.Position);
 
 		glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), SCR_WIDTH / SCR_HEIGHT, 0.1f, 100.0f);
@@ -196,22 +212,28 @@ int main()
 		boxShader.setMat4("projection", projection);
 		boxShader.setMat4("view", view);
 
-		glm::mat4 model = glm::mat4(1.0f);
-		boxShader.setMat4("model", model);
-
 		glBindVertexArray(VAO);
-		glDrawArrays(GL_TRIANGLES, 0, 36);
+		for (unsigned int i = 0; i < 10; i++)
+		{
+			glm::mat4 model = glm::mat4(1.0f);
+			model = glm::translate(model, cubePositions[i]);
+			float angle = 20.0f * i;
+			model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+			boxShader.setMat4("model", model);
 
-		lightShader.use();
-		lightShader.setMat4("projection", projection);
-		lightShader.setMat4("view", view);
-		model = glm::mat4(1.0f);
-		model = glm::translate(model, lightPos);
-		model = glm::scale(model, glm::vec3(0.2f));
-		lightShader.setMat4("model", model);
+			glDrawArrays(GL_TRIANGLES, 0, 36);
+		}
 
-		glBindVertexArray(lightVAO);
-		glDrawArrays(GL_TRIANGLES, 0, 36);
+		//lightShader.use();
+		//lightShader.setMat4("projection", projection);
+		//lightShader.setMat4("view", view);
+		//glm::mat4 model = glm::mat4(1.0f);
+		//model = glm::translate(model, lightPos);
+		//model = glm::scale(model, glm::vec3(0.2f));
+		//lightShader.setMat4("model", model);
+
+		//glBindVertexArray(lightVAO);
+		//glDrawArrays(GL_TRIANGLES, 0, 36);
 		
 		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
 		// -------------------------------------------------------------------------------
