@@ -145,10 +145,12 @@ int main()
 
 	unsigned int diffuseMap = loadTexture("container_diffuse.png");
 	unsigned int specularMap = loadTexture("container_specular.png");
+	unsigned int emissionMap = loadTexture("container_emission.jpg");
 
 	boxShader.use();
 	boxShader.setInt("material.diffuse", 0);
 	boxShader.setInt("material.specular", 1);
+	boxShader.setInt("material.emission", 2);
 
 	// render loop
 	// -----------
@@ -167,8 +169,8 @@ int main()
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
 
-		lightPos.x = sin(glfwGetTime()) * 2.0f;
-		lightPos.z = cos(glfwGetTime()) * 2.0f;
+		//lightPos.x = sin(glfwGetTime()) * 2.0f;
+		//lightPos.z = cos(glfwGetTime()) * 2.0f;
 
 		boxShader.use();
 
@@ -176,6 +178,8 @@ int main()
 		glBindTexture(GL_TEXTURE_2D, diffuseMap);
 		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_2D, specularMap);
+		glActiveTexture(GL_TEXTURE2);
+		glBindTexture(GL_TEXTURE_2D, emissionMap);
 
 		boxShader.setFloat("material.shininess", 0.4*128);
 

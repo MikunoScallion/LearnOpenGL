@@ -38,7 +38,6 @@ void main()
 	vec3 reflectDir = reflect(-lightDir, norm);
 
 	float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
-	//vec3 specular = spec * (vec3(1.0) - vec3(texture(material.specular, TexCoords).rgb)) * light.specular;
 	vec3 specular = spec * texture(material.specular, TexCoords).rgb * light.specular;
 
 	vec3 emissionValue = texture(material.emission, TexCoords).rgb;

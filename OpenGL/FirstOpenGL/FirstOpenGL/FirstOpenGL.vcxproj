@@ -41,6 +41,7 @@
   <ItemGroup>
     <Image Include="awesomeface.png" />
     <Image Include="container_diffuse.png" />
+    <Image Include="container_emission.jpg" />
     <Image Include="container_specular.png" />
     <Image Include="testTexture.jpg" />
   </ItemGroup>
