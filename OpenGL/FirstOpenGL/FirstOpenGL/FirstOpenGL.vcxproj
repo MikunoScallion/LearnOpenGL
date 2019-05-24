@@ -19,31 +19,25 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\include\glad.c" />
     <ClCompile Include="mainTriangle.cpp" />
-    <ClCompile Include="glad.c" />
     <ClCompile Include="stb_image.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="camera.h" />
-    <ClInclude Include="shader.h" />
-    <ClInclude Include="stb_image.h" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="light_fs.glsl" />
-    <None Include="box_fs.glsl">
-      <FileType>Document</FileType>
-    </None>
-    <None Include="box_vs.glsl">
-      <FileType>Document</FileType>
-    </None>
     <None Include="light_vs.glsl" />
+    <None Include="modelLoading_fs.glsl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="modelLoading_vs.glsl">
+      <FileType>Document</FileType>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="awesomeface.png" />
-    <Image Include="container_diffuse.png" />
-    <Image Include="container_emission.jpg" />
-    <Image Include="container_specular.png" />
-    <Image Include="testTexture.jpg" />
+    <ClInclude Include="..\include\camera.h" />
+    <ClInclude Include="..\include\model.h" />
+    <ClInclude Include="..\include\shader.h" />
+    <ClInclude Include="..\include\stb_image.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
@@ -97,8 +91,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>D:\Documents\GitLab\jtian_unity\OpenGL\FirstOpenGL\FirstOpenGL;D:\Software\glm;D:\Software\glfw-3.3\include;$(IncludePath)</IncludePath>
-    <LibraryPath>D:\Software\glfw-3.3\build\src\Debug;$(LibraryPath)</LibraryPath>
+    <IncludePath>..\include;$(IncludePath)</IncludePath>
+    <LibraryPath>..\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IncludePath>D:\Documents\GitLab\jtian_unity\OpenGL\FirstOpenGL\FirstOpenGL;D:\Software\glfw-3.3\include;D:\Software\glm;$(IncludePath)</IncludePath>
@@ -112,7 +106,7 @@
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>opengl32.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glfw3.lib;assimp-vc140-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
     </Link>
   </ItemDefinitionGroup>

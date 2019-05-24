@@ -15,32 +15,21 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="glad.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="mainTriangle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="stb_image.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\include\glad.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="shader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="stb_image.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="camera.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="box_vs.glsl">
+    <None Include="modelLoading_fs.glsl">
       <Filter>Source Files</Filter>
     </None>
-    <None Include="box_fs.glsl">
+    <None Include="modelLoading_vs.glsl">
       <Filter>Source Files</Filter>
     </None>
     <None Include="light_fs.glsl">
@@ -51,20 +40,17 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="testTexture.jpg">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="awesomeface.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="container_diffuse.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="container_specular.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="container_emission.jpg">
-      <Filter>Resource Files</Filter>
-    </Image>
+    <ClInclude Include="..\include\camera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\shader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\stb_image.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\model.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
