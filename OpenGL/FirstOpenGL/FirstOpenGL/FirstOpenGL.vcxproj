@@ -21,7 +21,11 @@
   <ItemGroup>
     <ClCompile Include="..\include\glad.c" />
     <ClCompile Include="mainTriangle.cpp" />
+    <None Include="outline_fs.glsl">
+      <FileType>CppCode</FileType>
+    </None>
     <ClCompile Include="stb_image.cpp" />
+    <None Include="plane_vs.glsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="light_fs.glsl" />

@@ -38,6 +38,12 @@
     <None Include="light_vs.glsl">
       <Filter>Source Files</Filter>
     </None>
+    <None Include="outline_fs.glsl">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="plane_vs.glsl">
+      <Filter>Source Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\camera.h">

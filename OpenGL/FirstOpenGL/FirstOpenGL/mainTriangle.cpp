@@ -73,16 +73,29 @@ int main()
 
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
+	glEnable(GL_STENCIL_TEST);
+	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 
 	// build and compile our shader program
 	// ------------------------------------
 	Shader ourShader("modelLoading_vs.glsl", "modelLoading_fs.glsl");
-	Shader lightShader("light_vs.glsl", "light_fs.glsl");
+	Shader outlineShader("modelLoading_vs.glsl", "outline_fs.glsl");
+	Shader planeShader("plane_vs.glsl", "light_fs.glsl");
 	// set up vertex data (and buffer(s)) and configure vertex attributes
 	// ------------------------------------------------------------------
 	
 	Model ourModel("resources/nanosuit/nanosuit.obj");
-	Model ourLightModel("resources/nanosuit/nanosuit.obj");
+
+	float planeVertices[] = {
+		// positions          // texture Coords (note we set these higher than 1 (together with GL_REPEAT as texture wrapping mode). this will cause the floor texture to repeat)
+		 5.0f, -0.5f,  5.0f,
+		-5.0f, -0.5f,  5.0f,
+		-5.0f, -0.5f, -5.0f,
+
+		 5.0f, -0.5f,  5.0f,
+		-5.0f, -0.5f, -5.0f,
+		 5.0f, -0.5f, -5.0f
+	};
 
 	glm::vec3 modelPos[] = {
 		glm::vec3(0.0f,  0.0f, 0.0f),
@@ -93,10 +106,18 @@ int main()
 
 	glm::vec3 lightPos[] = {
 		glm::vec3(0.f,  10.0f,  4.0f),
-		glm::vec3(0.0f, 3.0f, -4.0f),
-		//glm::vec3(-4.0f,  2.0f, -12.0f),
-		//glm::vec3(0.0f,  0.0f, -3.0f)
+		glm::vec3(0.0f, 3.0f, -4.0f)
 	};
+
+	unsigned int planeVAO, planeVBO;
+	glGenVertexArrays(1, &planeVAO);
+	glGenBuffers(1, &planeVBO);
+	glBindVertexArray(planeVAO);
+	glBindBuffer(GL_ARRAY_BUFFER, planeVBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(planeVertices), &planeVertices, GL_STATIC_DRAW);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	glBindVertexArray(0);
 
 	// draw in wireframe
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -115,8 +136,22 @@ int main()
 		// render
 		// ------
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
+		glm::mat4 model = glm::mat4(1.0f);
+		glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), SCR_WIDTH / SCR_HEIGHT, nearP, farP);
+		glm::mat4 view = camera.GetViewMatrix();
+
+		glStencilMask(0x00);
+		planeShader.use();
+		glBindVertexArray(planeVAO);
+		planeShader.setMat4("model", glm::mat4(1.0f));
+		planeShader.setMat4("view", view);
+		planeShader.setMat4("projection", projection);
+		glDrawArrays(GL_TRIANGLES, 0, 6);
+
+		glStencilFunc(GL_ALWAYS, 1, 0xFF);
+		glStencilMask(0xFF);
 		ourShader.use();
 
 		ourShader.setVec3("viewPos", camera.Position);
@@ -141,38 +176,30 @@ int main()
 		ourShader.setFloat("pointLights[1].constant", 1.0f);
 		ourShader.setFloat("pointLights[1].linear", 0.09);
 		ourShader.setFloat("pointLights[1].quadratic", 0.032);
-		
-		glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), SCR_WIDTH / SCR_HEIGHT, nearP, farP);
-		glm::mat4 view = camera.GetViewMatrix();
 
 		ourShader.setMat4("projection", projection);
-		ourShader.setFloat("near", nearP);
-		ourShader.setFloat("far", farP);
 		ourShader.setMat4("view", view);
 		
-		glm::mat4 model;
-		
-		for (unsigned int i = 0; i < 4; i++)
-		{
-			model = glm::mat4(1.0f);
-			model = glm::translate(model, modelPos[i]);
-			ourShader.setMat4("model", model);
-			ourModel.Draw(ourShader);
-		}
+		model = glm::translate(model, modelPos[0]);
+		ourShader.setMat4("model", model);
+		outlineShader.setInt("isOutline", 0);
 
-		//lightShader.use();
-		//lightShader.setMat4("projection", projection);
-		//lightShader.setMat4("view", view);
-		//
-		//for (unsigned int i = 0; i < 2; i++)
-		//{
-		//	model = glm::mat4(1.0f);
-		//	model = glm::translate(model, lightPos[i]);
-		//	model = glm::scale(model, glm::vec3(0.2f)); // Make it a smaller cube
-		//	lightShader.setMat4("model", model);
-		//	ourLightModel.Draw(lightShader);
-		//}
-	
+		ourModel.Draw(ourShader);
+
+		glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
+		glStencilMask(0x00);
+		outlineShader.use();
+		model = glm::mat4(1.0f);
+		model = glm::translate(model, modelPos[0]);
+		outlineShader.setMat4("model", model);
+		outlineShader.setMat4("view", view);
+		outlineShader.setMat4("projection", projection);
+		outlineShader.setInt("isOutline", 1);
+		ourModel.Draw(outlineShader);
+
+		glStencilMask(0xFF);
+		glEnable(GL_DEPTH_TEST);
+
 		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
 		// -------------------------------------------------------------------------------
 		glfwSwapBuffers(window);
