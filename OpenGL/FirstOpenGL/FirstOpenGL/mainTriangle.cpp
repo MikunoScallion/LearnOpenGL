@@ -23,6 +23,8 @@ const float SCR_WIDTH = 800;
 const float SCR_HEIGHT = 600;
 
 Camera camera(glm::vec3(0.0f, 10.0f, 10.0f));
+float nearP = 0.1;
+float farP = 100.0;
 float lastX = SCR_WIDTH / 2.0f;
 float lastY = SCR_HEIGHT / 2.0f;
 bool firstMouse = true;
@@ -70,6 +72,7 @@ int main()
 	}
 
 	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LESS);
 
 	// build and compile our shader program
 	// ------------------------------------
@@ -80,6 +83,13 @@ int main()
 	
 	Model ourModel("resources/nanosuit/nanosuit.obj");
 	Model ourLightModel("resources/nanosuit/nanosuit.obj");
+
+	glm::vec3 modelPos[] = {
+		glm::vec3(0.0f,  0.0f, 0.0f),
+		glm::vec3(10.0f,  0.0f, 0.0f),
+		glm::vec3(20.0f, 0.0f, 0.0f),
+		glm::vec3(30.0f,  0.0f, 0.0f)
+	};
 
 	glm::vec3 lightPos[] = {
 		glm::vec3(0.f,  10.0f,  4.0f),
@@ -112,7 +122,7 @@ int main()
 		ourShader.setVec3("viewPos", camera.Position);
 
 		ourShader.setVec3("dirLight.direction", -0.2f, -1.0f, -0.3f);
-		ourShader.setVec3("dirLight.ambient", 0.05f, 0.05f, 0.05f);
+		ourShader.setVec3("dirLight.ambient", 0.5f, 0.5f, 0.5f);
 		ourShader.setVec3("dirLight.diffuse", 0.8f, 0.8f, 0.8f);
 		ourShader.setVec3("dirLight.specular", 0.5f, 0.5f, 0.5f);
 
@@ -131,38 +141,44 @@ int main()
 		ourShader.setFloat("pointLights[1].constant", 1.0f);
 		ourShader.setFloat("pointLights[1].linear", 0.09);
 		ourShader.setFloat("pointLights[1].quadratic", 0.032);
-
-		glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), SCR_WIDTH / SCR_HEIGHT, 0.1f, 100.0f);
-		glm::mat4 view = camera.GetViewMatrix();
 		
+		glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), SCR_WIDTH / SCR_HEIGHT, nearP, farP);
+		glm::mat4 view = camera.GetViewMatrix();
+
 		ourShader.setMat4("projection", projection);
+		ourShader.setFloat("near", nearP);
+		ourShader.setFloat("far", farP);
 		ourShader.setMat4("view", view);
 		
-		glm::mat4 model = glm::mat4(1.0f);
-		model = glm::translate(model, glm::vec3(0.0f, -1.75f, 0.0f)); // translate it down so it's at the center of the scene
-		model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));	// it's a bit too big for our scene, so scale it down
-		ourShader.setMat4("model", model);
-		ourModel.Draw(ourShader);
-
-		lightShader.use();
-		lightShader.setMat4("projection", projection);
-		lightShader.setMat4("view", view);
+		glm::mat4 model;
 		
-		for (unsigned int i = 0; i < 2; i++)
+		for (unsigned int i = 0; i < 4; i++)
 		{
 			model = glm::mat4(1.0f);
-			model = glm::translate(model, lightPos[i]);
-			model = glm::scale(model, glm::vec3(0.2f)); // Make it a smaller cube
-			lightShader.setMat4("model", model);
-			ourLightModel.Draw(lightShader);
+			model = glm::translate(model, modelPos[i]);
+			ourShader.setMat4("model", model);
+			ourModel.Draw(ourShader);
 		}
+
+		//lightShader.use();
+		//lightShader.setMat4("projection", projection);
+		//lightShader.setMat4("view", view);
+		//
+		//for (unsigned int i = 0; i < 2; i++)
+		//{
+		//	model = glm::mat4(1.0f);
+		//	model = glm::translate(model, lightPos[i]);
+		//	model = glm::scale(model, glm::vec3(0.2f)); // Make it a smaller cube
+		//	lightShader.setMat4("model", model);
+		//	ourLightModel.Draw(lightShader);
+		//}
 	
 		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
 		// -------------------------------------------------------------------------------
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
-
+	
 	// glfw: terminate, clearing all previously allocated GLFW resources.
 	// ------------------------------------------------------------------
 	glfwTerminate();
@@ -177,7 +193,6 @@ void processInput(GLFWwindow *window)
 
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
-
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 		camera.ProcessKeyboard(FORWARD, deltaTime);
 	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
