@@ -21,27 +21,17 @@
   <ItemGroup>
     <ClCompile Include="..\include\glad.c" />
     <ClCompile Include="mainTriangle.cpp" />
-    <None Include="outline_fs.glsl">
-      <FileType>CppCode</FileType>
-    </None>
     <ClCompile Include="stb_image.cpp" />
-    <None Include="plane_vs.glsl" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="light_fs.glsl" />
-    <None Include="light_vs.glsl" />
-    <None Include="modelLoading_fs.glsl">
-      <FileType>Document</FileType>
-    </None>
-    <None Include="modelLoading_vs.glsl">
-      <FileType>Document</FileType>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\camera.h" />
     <ClInclude Include="..\include\model.h" />
     <ClInclude Include="..\include\shader.h" />
     <ClInclude Include="..\include\stb_image.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="box_fs.glsl" />
+    <None Include="box_vs.glsl" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
