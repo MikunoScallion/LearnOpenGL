@@ -75,6 +75,7 @@ int main()
 	glDepthFunc(GL_LESS);
 	glEnable(GL_STENCIL_TEST);
 	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+	//glStencilOp(GL_KEEP, GL_REPLACE, GL_REPLACE);
 
 	// build and compile our shader program
 	// ------------------------------------
@@ -186,9 +187,14 @@ int main()
 
 		ourModel.Draw(ourShader);
 
+		
 		glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
 		glStencilMask(0x00);
+
+		glDisable(GL_DEPTH_TEST);
+
 		outlineShader.use();
+
 		model = glm::mat4(1.0f);
 		model = glm::translate(model, modelPos[0]);
 		outlineShader.setMat4("model", model);
