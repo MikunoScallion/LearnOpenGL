@@ -46,5 +46,11 @@
     <None Include="box_vs.glsl">
       <Filter>Source Files</Filter>
     </None>
+    <None Include="frameBuffer_fs.glsl">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="frameBuffer_vs.glsl">
+      <Filter>Header Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

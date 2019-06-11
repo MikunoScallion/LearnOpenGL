@@ -32,6 +32,8 @@
   <ItemGroup>
     <None Include="box_fs.glsl" />
     <None Include="box_vs.glsl" />
+    <None Include="frameBuffer_fs.glsl" />
+    <None Include="frameBuffer_vs.glsl" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
