@@ -24,16 +24,20 @@
     <ClCompile Include="stb_image.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="skybox_fs.glsl" />
+    <None Include="skybox_vs.glsl" />
+    <None Include="model_fs.glsl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="model_vs.glsl">
+      <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
     <ClInclude Include="..\include\camera.h" />
     <ClInclude Include="..\include\model.h" />
     <ClInclude Include="..\include\shader.h" />
     <ClInclude Include="..\include\stb_image.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="box_fs.glsl" />
-    <None Include="box_vs.glsl" />
-    <None Include="frameBuffer_fs.glsl" />
-    <None Include="frameBuffer_vs.glsl" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
