@@ -26,16 +26,16 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="modelLoading_fs.glsl">
+    <None Include="skybox_fs.glsl">
       <Filter>Source Files</Filter>
     </None>
-    <None Include="modelLoading_vs.glsl">
+    <None Include="skybox_vs.glsl">
       <Filter>Source Files</Filter>
     </None>
-    <None Include="light_fs.glsl">
+    <None Include="model_vs.glsl">
       <Filter>Source Files</Filter>
     </None>
-    <None Include="light_vs.glsl">
+    <None Include="model_fs.glsl">
       <Filter>Source Files</Filter>
     </None>
   </ItemGroup>
