@@ -22,7 +22,7 @@ unsigned int loadCubemap(vector<std::string> faces);
 const float SCR_WIDTH = 1280;
 const float SCR_HEIGHT = 720;
 
-glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 5.0f);
+glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 0.0f);
 
 Camera camera(cameraPos);
 float nearP = 0.1;
@@ -78,90 +78,27 @@ int main()
 
 	// build and compile our shader program
 	// ------------------------------------
-	Shader boxRedShader("box_vs.glsl", "boxR_fs.glsl");
-	Shader boxGreenShader("box_vs.glsl", "boxG_fs.glsl");
-	Shader boxBlueShader("box_vs.glsl", "boxB_fs.glsl");
-	Shader boxYellowShader("box_vs.glsl", "boxRG_fs.glsl");
+	Shader houseShader("house_vs.glsl", "house_fs.glsl", "house_gs.glsl");
 	// set up vertex data (and buffer(s)) and configure vertex attributes
 	// ------------------------------------------------------------------
 
-	float boxVertices[] = {
-		// positions          
-		-1.0f,  1.0f, -1.0f,
-		-1.0f, -1.0f, -1.0f,
-		 1.0f, -1.0f, -1.0f,
-		 1.0f, -1.0f, -1.0f,
-		 1.0f,  1.0f, -1.0f,
-		-1.0f,  1.0f, -1.0f,
-
-		-1.0f, -1.0f,  1.0f,
-		-1.0f, -1.0f, -1.0f,
-		-1.0f,  1.0f, -1.0f,
-		-1.0f,  1.0f, -1.0f,
-		-1.0f,  1.0f,  1.0f,
-		-1.0f, -1.0f,  1.0f,
-
-		 1.0f, -1.0f, -1.0f,
-		 1.0f, -1.0f,  1.0f,
-		 1.0f,  1.0f,  1.0f,
-		 1.0f,  1.0f,  1.0f,
-		 1.0f,  1.0f, -1.0f,
-		 1.0f, -1.0f, -1.0f,
-
-		-1.0f, -1.0f,  1.0f,
-		-1.0f,  1.0f,  1.0f,
-		 1.0f,  1.0f,  1.0f,
-		 1.0f,  1.0f,  1.0f,
-		 1.0f, -1.0f,  1.0f,
-		-1.0f, -1.0f,  1.0f,
-
-		-1.0f,  1.0f, -1.0f,
-		 1.0f,  1.0f, -1.0f,
-		 1.0f,  1.0f,  1.0f,
-		 1.0f,  1.0f,  1.0f,
-		-1.0f,  1.0f,  1.0f,
-		-1.0f,  1.0f, -1.0f,
-
-		-1.0f, -1.0f, -1.0f,
-		-1.0f, -1.0f,  1.0f,
-		 1.0f, -1.0f, -1.0f,
-		 1.0f, -1.0f, -1.0f,
-		-1.0f, -1.0f,  1.0f,
-		 1.0f, -1.0f,  1.0f
+	float points[] = {
+		-0.5f,  0.5f, 1.0f, 0.0f, 0.0f,
+		 0.5f,  0.5f, 0.0f, 1.0f, 0.0f,
+		 0.5f, -0.5f, 0.0f, 0.0f, 1.0f,
+		-0.5f, -0.5f, 1.0f, 1.0f, 0.0f
 	};
 
-	unsigned int uniformBlockIndexRed = glGetUniformBlockIndex(boxRedShader.ID, "Matrices");
-	unsigned int uniformBlockIndexGreen = glGetUniformBlockIndex(boxGreenShader.ID, "Matrices");
-	unsigned int uniformBlockIndexBlue = glGetUniformBlockIndex(boxBlueShader.ID, "Matrices");
-	unsigned int uniformBlockIndexYellow = glGetUniformBlockIndex(boxYellowShader.ID, "Matrices");
-
-	glUniformBlockBinding(boxRedShader.ID, uniformBlockIndexRed, 0);
-	glUniformBlockBinding(boxGreenShader.ID, uniformBlockIndexGreen, 0);
-	glUniformBlockBinding(boxBlueShader.ID, uniformBlockIndexBlue, 0);
-	glUniformBlockBinding(boxYellowShader.ID, uniformBlockIndexYellow, 0);
-
-	unsigned int uboMatrices;
-	glGenBuffers(1, &uboMatrices);
-
-	glBindBuffer(GL_UNIFORM_BUFFER, uboMatrices);
-	glBufferData(GL_UNIFORM_BUFFER, 2 * sizeof(glm::mat4), NULL, GL_STATIC_DRAW);
-	glBindBuffer(GL_UNIFORM_BUFFER, 0);
-
-	glBindBufferRange(GL_UNIFORM_BUFFER, 0, uboMatrices, 0, 2 * sizeof(glm::mat4));
-
-	glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), SCR_WIDTH / SCR_HEIGHT, nearP, farP);
-	glBindBuffer(GL_UNIFORM_BUFFER, uboMatrices);
-	glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), glm::value_ptr(projection));
-	glBindBuffer(GL_UNIFORM_BUFFER, 0);
-
-	unsigned int boxVAO, boxVBO;
-	glGenVertexArrays(1, &boxVAO);
-	glGenBuffers(1, &boxVBO);
-	glBindVertexArray(boxVAO);
-	glBindBuffer(GL_ARRAY_BUFFER, boxVBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(boxVertices), &boxVertices, GL_STATIC_DRAW);
+	unsigned int houseVAO, houseVBO;
+	glGenVertexArrays(1, &houseVAO);
+	glGenBuffers(1, &houseVBO);
+	glBindVertexArray(houseVAO);
+	glBindBuffer(GL_ARRAY_BUFFER, houseVBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(points), &points, GL_STATIC_DRAW);
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(2 * sizeof(float)));
 	glBindVertexArray(0);
 
 	// draw in wireframe
@@ -183,34 +120,10 @@ int main()
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		glm::mat4 model = glm::mat4(1.0f);
-		glm::mat4 view = glm::mat4(1.0f);
-		view = camera.GetViewMatrix();
-		glBindBuffer(GL_UNIFORM_BUFFER, uboMatrices);
-		glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), sizeof(glm::mat4), glm::value_ptr(view));
-		glBindBuffer(GL_UNIFORM_BUFFER, 0);
+		glBindVertexArray(houseVAO);
 
-		glBindVertexArray(boxVAO);
-
-		boxRedShader.use();
-		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
-		boxRedShader.setMat4("model", model);
-		glDrawArrays(GL_TRIANGLES, 0, 36);
-
-		boxGreenShader.use();
-		model = glm::translate(model, glm::vec3(3.0f, 0.0f, 0.0f));
-		boxGreenShader.setMat4("model", model);
-		glDrawArrays(GL_TRIANGLES, 0, 36);
-
-		boxBlueShader.use();
-		model = glm::translate(model, glm::vec3(3.0f, 0.0f, 0.0f));
-		boxBlueShader.setMat4("model", model);
-		glDrawArrays(GL_TRIANGLES, 0, 36);
-
-		boxYellowShader.use();
-		model = glm::translate(model, glm::vec3(3.0f, 0.0f, 0.0f));
-		boxYellowShader.setMat4("model", model);
-		glDrawArrays(GL_TRIANGLES, 0, 36);
+		houseShader.use();
+		glDrawArrays(GL_POINTS, 0, 4);
 		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
 		// -------------------------------------------------------------------------------
 		glfwSwapBuffers(window);

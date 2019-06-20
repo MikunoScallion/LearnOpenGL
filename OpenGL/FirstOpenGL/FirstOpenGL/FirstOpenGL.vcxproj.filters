@@ -26,19 +26,13 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="boxR_fs.glsl">
+    <None Include="house_gs.glsl">
       <Filter>Source Files</Filter>
     </None>
-    <None Include="boxB_fs.glsl">
+    <None Include="house_vs.glsl">
       <Filter>Source Files</Filter>
     </None>
-    <None Include="boxG_fs.glsl">
-      <Filter>Source Files</Filter>
-    </None>
-    <None Include="boxRG_fs.glsl">
-      <Filter>Source Files</Filter>
-    </None>
-    <None Include="box_vs.glsl">
+    <None Include="house_fs.glsl">
       <Filter>Source Files</Filter>
     </None>
   </ItemGroup>
