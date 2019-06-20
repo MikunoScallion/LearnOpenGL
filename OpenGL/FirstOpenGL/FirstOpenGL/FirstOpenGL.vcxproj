@@ -24,12 +24,13 @@
     <ClCompile Include="stb_image.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="skybox_fs.glsl" />
-    <None Include="skybox_vs.glsl" />
-    <None Include="model_fs.glsl">
+    <None Include="boxB_fs.glsl" />
+    <None Include="boxG_fs.glsl" />
+    <None Include="boxRG_fs.glsl" />
+    <None Include="boxR_fs.glsl">
       <FileType>Document</FileType>
     </None>
-    <None Include="model_vs.glsl">
+    <None Include="box_vs.glsl">
       <FileType>Document</FileType>
     </None>
   </ItemGroup>

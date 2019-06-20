@@ -22,7 +22,7 @@ unsigned int loadCubemap(vector<std::string> faces);
 const float SCR_WIDTH = 1280;
 const float SCR_HEIGHT = 720;
 
-glm::vec3 cameraPos = glm::vec3(0.0f, 10.0f, 10.0f);
+glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 5.0f);
 
 Camera camera(cameraPos);
 float nearP = 0.1;
@@ -74,23 +74,18 @@ int main()
 	}
 
 	glEnable(GL_DEPTH_TEST);
-	glDepthFunc(GL_LEQUAL);
+	glDepthFunc(GL_LESS);
 
 	// build and compile our shader program
 	// ------------------------------------
-	Shader ourShader("model_vs.glsl", "model_fs.glsl");
-	Shader skyboxShader("skybox_vs.glsl", "skybox_fs.glsl");
+	Shader boxRedShader("box_vs.glsl", "boxR_fs.glsl");
+	Shader boxGreenShader("box_vs.glsl", "boxG_fs.glsl");
+	Shader boxBlueShader("box_vs.glsl", "boxB_fs.glsl");
+	Shader boxYellowShader("box_vs.glsl", "boxRG_fs.glsl");
 	// set up vertex data (and buffer(s)) and configure vertex attributes
 	// ------------------------------------------------------------------
-	
-	Model ourModel("resources/nanosuit/nanosuit.obj");
 
-	glm::vec3 lightPos[] = {
-		glm::vec3(0.f,  10.0f,  4.0f),
-		glm::vec3(0.0f, 3.0f, -4.0f)
-	};
-
-	float skyboxVertices[] = {
+	float boxVertices[] = {
 		// positions          
 		-1.0f,  1.0f, -1.0f,
 		-1.0f, -1.0f, -1.0f,
@@ -135,23 +130,36 @@ int main()
 		 1.0f, -1.0f,  1.0f
 	};
 
-	vector<std::string> faces
-	{
-		"resources/skybox/right.jpg",
-		"resources/skybox/left.jpg",
-		"resources/skybox/top.jpg",
-		"resources/skybox/bottom.jpg",
-		"resources/skybox/front.jpg",
-		"resources/skybox/back.jpg"
-	};
-	unsigned int cubemapTexture = loadCubemap(faces);
+	unsigned int uniformBlockIndexRed = glGetUniformBlockIndex(boxRedShader.ID, "Matrices");
+	unsigned int uniformBlockIndexGreen = glGetUniformBlockIndex(boxGreenShader.ID, "Matrices");
+	unsigned int uniformBlockIndexBlue = glGetUniformBlockIndex(boxBlueShader.ID, "Matrices");
+	unsigned int uniformBlockIndexYellow = glGetUniformBlockIndex(boxYellowShader.ID, "Matrices");
 
-	unsigned int skyboxVAO, skyboxVBO;
-	glGenVertexArrays(1, &skyboxVAO);
-	glGenBuffers(1, &skyboxVBO);
-	glBindVertexArray(skyboxVAO);
-	glBindBuffer(GL_ARRAY_BUFFER, skyboxVBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(skyboxVertices), &skyboxVertices, GL_STATIC_DRAW);
+	glUniformBlockBinding(boxRedShader.ID, uniformBlockIndexRed, 0);
+	glUniformBlockBinding(boxGreenShader.ID, uniformBlockIndexGreen, 0);
+	glUniformBlockBinding(boxBlueShader.ID, uniformBlockIndexBlue, 0);
+	glUniformBlockBinding(boxYellowShader.ID, uniformBlockIndexYellow, 0);
+
+	unsigned int uboMatrices;
+	glGenBuffers(1, &uboMatrices);
+
+	glBindBuffer(GL_UNIFORM_BUFFER, uboMatrices);
+	glBufferData(GL_UNIFORM_BUFFER, 2 * sizeof(glm::mat4), NULL, GL_STATIC_DRAW);
+	glBindBuffer(GL_UNIFORM_BUFFER, 0);
+
+	glBindBufferRange(GL_UNIFORM_BUFFER, 0, uboMatrices, 0, 2 * sizeof(glm::mat4));
+
+	glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), SCR_WIDTH / SCR_HEIGHT, nearP, farP);
+	glBindBuffer(GL_UNIFORM_BUFFER, uboMatrices);
+	glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), glm::value_ptr(projection));
+	glBindBuffer(GL_UNIFORM_BUFFER, 0);
+
+	unsigned int boxVAO, boxVBO;
+	glGenVertexArrays(1, &boxVAO);
+	glGenBuffers(1, &boxVBO);
+	glBindVertexArray(boxVAO);
+	glBindBuffer(GL_ARRAY_BUFFER, boxVBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(boxVertices), &boxVertices, GL_STATIC_DRAW);
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 	glBindVertexArray(0);
@@ -176,30 +184,33 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		glm::mat4 model = glm::mat4(1.0f);
-		glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), SCR_WIDTH / SCR_HEIGHT, nearP, farP);
 		glm::mat4 view = glm::mat4(1.0f);
-
-		ourShader.use();
 		view = camera.GetViewMatrix();
-		ourShader.setMat4("projection", projection);
-		ourShader.setMat4("view", view);
-		ourShader.setMat4("model", model);
-		ourShader.setVec3("cameraPos", camera.Position);
+		glBindBuffer(GL_UNIFORM_BUFFER, uboMatrices);
+		glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), sizeof(glm::mat4), glm::value_ptr(view));
+		glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
-		ourShader.setInt("skybox", 3);
-		glActiveTexture(GL_TEXTURE3);
-		glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture);
+		glBindVertexArray(boxVAO);
 
-		ourModel.Draw(ourShader);
-
-		skyboxShader.use();
-		view = glm::mat4(glm::mat3(camera.GetViewMatrix()));
-		skyboxShader.setMat4("projection", projection);
-		skyboxShader.setMat4("view", view);
-		glBindVertexArray(skyboxVAO);
-		glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture);
+		boxRedShader.use();
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
+		boxRedShader.setMat4("model", model);
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 
+		boxGreenShader.use();
+		model = glm::translate(model, glm::vec3(3.0f, 0.0f, 0.0f));
+		boxGreenShader.setMat4("model", model);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+
+		boxBlueShader.use();
+		model = glm::translate(model, glm::vec3(3.0f, 0.0f, 0.0f));
+		boxBlueShader.setMat4("model", model);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+
+		boxYellowShader.use();
+		model = glm::translate(model, glm::vec3(3.0f, 0.0f, 0.0f));
+		boxYellowShader.setMat4("model", model);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
 		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
 		// -------------------------------------------------------------------------------
 		glfwSwapBuffers(window);
