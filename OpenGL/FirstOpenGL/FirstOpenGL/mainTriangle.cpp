@@ -79,6 +79,7 @@ int main()
 	// build and compile our shader program
 	// ------------------------------------
 	Shader ourShader("model_vs.glsl", "model_fs.glsl");
+	Shader normaldDisplayShader("model_normalDisplay_vs.glsl", "model_normalDisplay_fs.glsl", "model_normalDisplay_gs.glsl");
 	Shader skyboxShader("skybox_vs.glsl", "skybox_fs.glsl");
 	// set up vertex data (and buffer(s)) and configure vertex attributes
 	// ------------------------------------------------------------------
@@ -189,8 +190,14 @@ int main()
 		ourShader.setInt("skybox", 3);
 		glActiveTexture(GL_TEXTURE3);
 		glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture);
-
+		ourShader.setFloat("time", glfwGetTime());
 		ourModel.Draw(ourShader);
+
+		normaldDisplayShader.use();
+		normaldDisplayShader.setMat4("projection", projection);
+		normaldDisplayShader.setMat4("view", view);
+		normaldDisplayShader.setMat4("model", model);
+		ourModel.Draw(normaldDisplayShader);
 
 		skyboxShader.use();
 		view = glm::mat4(glm::mat3(camera.GetViewMatrix()));
