@@ -32,9 +32,6 @@
     <None Include="house_fs.glsl">
       <Filter>Source Files</Filter>
     </None>
-    <None Include="houseInstance_vs.glsl">
-      <Filter>Source Files</Filter>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\camera.h">

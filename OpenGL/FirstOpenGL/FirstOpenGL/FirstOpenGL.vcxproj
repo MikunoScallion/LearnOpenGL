@@ -24,7 +24,6 @@
     <ClCompile Include="stb_image.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="houseInstance_vs.glsl" />
     <None Include="house_fs.glsl" />
     <None Include="house_vs.glsl">
       <FileType>Document</FileType>
