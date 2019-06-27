@@ -47,10 +47,10 @@
       <Filter>Source Files</Filter>
     </None>
     <None Include="frameBuffer_fs.glsl">
-      <Filter>Header Files</Filter>
+      <Filter>Source Files</Filter>
     </None>
     <None Include="frameBuffer_vs.glsl">
-      <Filter>Header Files</Filter>
+      <Filter>Source Files</Filter>
     </None>
   </ItemGroup>
 </Project>
