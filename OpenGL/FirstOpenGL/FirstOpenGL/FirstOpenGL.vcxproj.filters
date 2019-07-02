@@ -37,16 +37,16 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="box_shader.fs">
-      <Filter>Source Files</Filter>
-    </None>
-    <None Include="box_shader.vs">
-      <Filter>Source Files</Filter>
-    </None>
     <None Include="light_shader.fs">
       <Filter>Source Files</Filter>
     </None>
     <None Include="light_shader.vs">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="box_fs.glsl">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="box_vs.glsl">
       <Filter>Source Files</Filter>
     </None>
   </ItemGroup>

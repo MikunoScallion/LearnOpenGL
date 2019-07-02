@@ -71,7 +71,7 @@ int main()
 
 	// build and compile our shader program
 	// ------------------------------------
-	Shader boxShader("box_shader.vs", "box_shader.fs");
+	Shader boxShader("box_vs.glsl", "box_fs.glsl");
 	Shader lightShader("light_shader.vs", "light_shader.fs");
 
 	// set up vertex data (and buffer(s)) and configure vertex attributes
