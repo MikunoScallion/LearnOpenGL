@@ -37,12 +37,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="light_shader.fs">
-      <Filter>Source Files</Filter>
-    </None>
-    <None Include="light_shader.vs">
-      <Filter>Source Files</Filter>
-    </None>
     <None Include="box_fs.glsl">
       <Filter>Source Files</Filter>
     </None>

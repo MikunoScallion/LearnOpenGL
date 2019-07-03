@@ -29,14 +29,12 @@
     <ClInclude Include="stb_image.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="light_shader.fs" />
     <None Include="box_fs.glsl">
       <FileType>Document</FileType>
     </None>
     <None Include="box_vs.glsl">
       <FileType>Document</FileType>
     </None>
-    <None Include="light_shader.vs" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="awesomeface.png" />
