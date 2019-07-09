@@ -37,10 +37,22 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="box_fs.glsl">
+    <None Include="depth_vs.glsl">
       <Filter>Source Files</Filter>
     </None>
-    <None Include="box_vs.glsl">
+    <None Include="depth_fs.glsl">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="depthTexture_fs.glsl">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="depthTexture_vs.glsl">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="shadow_fs.glsl">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="shadow_vs.glsl">
       <Filter>Source Files</Filter>
     </None>
   </ItemGroup>

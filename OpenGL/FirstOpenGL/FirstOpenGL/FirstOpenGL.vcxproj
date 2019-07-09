@@ -29,12 +29,16 @@
     <ClInclude Include="stb_image.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="box_fs.glsl">
+    <None Include="depthTexture_fs.glsl" />
+    <None Include="depthTexture_vs.glsl" />
+    <None Include="depth_fs.glsl">
       <FileType>Document</FileType>
     </None>
-    <None Include="box_vs.glsl">
+    <None Include="depth_vs.glsl">
       <FileType>Document</FileType>
     </None>
+    <None Include="shadow_fs.glsl" />
+    <None Include="shadow_vs.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="awesomeface.png" />
