@@ -349,3 +349,181 @@ MigrationBackup/
 
 # maya temp files
 .mayaSwatches/
+
+# =============== #
+# Unity generated #
+# =============== #
+jtian_unity/[Tt]emp/
+jtian_unity/[Oo]bj/
+jtian_unity/[Bb]uild/
+jtian_unity/[Bb]uilds/
+jtian_unity/[Ll]ibrary/
+jtian_unity/[Ll]ibraryCache/
+jtian_unity/[Ll]ogs/
+jtian_unity/Rebuilder/
+sysinfo.txt
+*.stackdump
+jtian_unity/Assets/AssetStoreTools*
+jtian_unity/Assets/Plugins/Editor/JetBrains*
+jtian_unity/Assets/Fabric/Editor/GUI/Resources/Manager.cs
+jtian_unity/Assets/Fabric/Editor/GUI/Resources/Manager.cs.meta
+/**/**/FullInspector2_Generated/*.prefab
+/**/**/FullInspector2_Generated/*.prefab.meta
+jtian_unity/Assets/StreamingAssets/crashlytics-build.properties
+jtian_unity/Assets/StreamingAssets/crashlytics-build.properties.meta
+RedCrowCache/
+
+# =================================== #
+# HAL StagedStrings                   #
+# =================================== #
+/jtian_unity/Assets/Scripts/Editor/Hal/TxtReference/StagedStrings*
+
+# =================================== #
+# Jon’s working directory for mockups #
+# =================================== #
+jtian_unity/Assets/mockups/*
+jtian_unity/Assets/mockups.meta
+
+# =================================== #
+# Loc and HAL Export temporary files  #
+# =================================== #
+Tools/LocalizationPipeline/temp/*
+Tools/LocalizationPipeline/obj/*
+Tools/LocalizationPipeline/bin/*
+Tools/Localization/Main_strings.csv
+
+# ===================================== #
+# Visual Studio / MonoDevelop generated #
+# ===================================== #
+[Ee]xported[Oo]bj/
+.vs/
+*.userprefs
+*.csproj
+*.pidb
+*.suo
+/jtian_unity/*.sln
+/jtian_unity/.vscode/
+/jtian_unity/.idea/
+
+*.user
+*.userprefs
+*.unityproj
+*.booproj
+*.tmp
+*.svd
+
+# ========================== #
+# Unity generated meta files #
+# ========================== #
+*.pidb.meta
+
+
+# ====== #
+# Builds #
+# ====== #
+*.apk
+*.app
+*.ipa
+*.unitypackage
+/jtian_unity/AssetBundles/
+/jtian_unity/DLC/
+/jtian_unity/DLC_EMBEDDED_TEMP/
+/jtian_unity/Assets/StreamingAssets/DLC/
+/jtian_unity/Assets/StreamingAssets/DLC.meta
+/jtian_unity/BuildLogs/
+/UnityAndroid*/.idea/caches
+
+# ============ #
+# OS generated #
+# ============ #
+.DS_Store*
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+[Tt]humbs.db
+
+# ================= #
+# OBJ Exporter tool #
+# ================= #
+/jtian_unity/Assets/OBJExport/Documentation.meta
+/jtian_unity/Assets/OBJExport/Documentation/docs.meta
+/jtian_unity/Assets/OBJExport/Documentation/docs/export.html
+/jtian_unity/Assets/OBJExport/Documentation/docs/export.html.meta
+/jtian_unity/Assets/OBJExport/Documentation/docs/export_a.html
+/jtian_unity/Assets/OBJExport/Documentation/docs/export_a.html.meta
+/jtian_unity/Assets/OBJExport/Documentation/docs/intro.html
+/jtian_unity/Assets/OBJExport/Documentation/docs/intro.html.meta
+/jtian_unity/Assets/OBJExport/Documentation/docs/troubleshooting.html
+/jtian_unity/Assets/OBJExport/Documentation/docs/troubleshooting.html.meta
+/jtian_unity/Assets/OBJExport/Documentation/imgs.meta
+/jtian_unity/Assets/OBJExport/Documentation/imgs/d_be.png
+/jtian_unity/Assets/OBJExport/Documentation/imgs/d_be.png.meta
+/jtian_unity/Assets/OBJExport/Documentation/index.html
+/jtian_unity/Assets/OBJExport/Documentation/index.html.meta
+/jtian_unity/Assets/OBJExport/Documentation/style.css
+/jtian_unity/Assets/OBJExport/Documentation/style.css.meta
+/jtian_unity/Assets/OBJExport/OBJExporter.cs
+/jtian_unity/Assets/OBJExport/OBJExporter.cs.meta
+/jtian_unity/Assets/OBJExport.meta
+
+# ============== #
+# 3rd-party SDKs #
+# ============== #
+!/jtian_unity/Assets/**/*.dll
+!/jtian_unity/Assets/**/*.pdb
+
+# ============= #
+# Node.js stuff #
+# ============= #
+package-lock.json
+
+node_modules/
+bower_modules/
+bower_components/
+
+.sonar/
+sonar-project.properties
+jtian_unity/.sonarqube/
+Tools/CodeAnalysis/packages/
+*.ruleset
+
+Tools/CodeAnalysis/OdinCustomRules/OdinCustomRules.Vsix/bin/
+Tools/CodeAnalysis/OdinCustomRules/OdinCustomRules.Vsix/obj/
+Tools/CodeAnalysis/OdinCustomRules/OdinCustomRules.Test/obj/
+Tools/CodeAnalysis/OdinCustomRules/OdinCustomRules/obj/
+Tools/CodeAnalysis/OdinCustomRules/OdinCustomRules.Test/bin/
+Tools/CodeAnalysis/OdinCustomRules/OdinCustomRules/bin/
+Tools/DataKeyDocGenerator/bin/Debug/
+Tools/DataKeyDocGenerator/obj/
+
+.vscode/
+Tools/DataKeyAnalyzer/bin/Debug/
+Tools/DataKeyAnalyzer/obj/
+jtian_unity/jtian_unity.VC.db
+jtian_unity/jtian_unity.VC.VC.opendb
+
+
+# =================#
+# Gradle generated #
+# =================#
+/jtian_unity/.gradle/
+
+# ======== #
+# AKWwise  #
+# ======== #
+.cache
+*.akd
+*.apkd
+*.validationcache
+jtian_unity/Assets/Scripts/External/Wwise/Editor/ProjectData/
+jtian_unity/Assets/Scripts/External/Wwise/Editor/ProjectData.meta
+jtian_unity/Assets/Plugins/iOS/res/synergy_direction.json.meta
+jtian_unity/Assets/Plugins/iOS/res/synergy_direction.json
+jtian_unity/Assets/Plugins/Android/resources_nimble/res/raw/synergy_direction.json.meta
+jtian_unity/Assets/Plugins/Android/resources_nimble/res/raw/synergy_direction.json
+
+# ================================#
+# Asset Bundle Analyzer generated #
+# ================================#
+jtian_unity/BundleAnalyzerOutput/
