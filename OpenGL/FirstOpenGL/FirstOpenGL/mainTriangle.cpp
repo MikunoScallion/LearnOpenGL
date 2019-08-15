@@ -1,3 +1,5 @@
+﻿// 按T在物体空间和切线空间切换
+
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <stb_image.h>
@@ -31,8 +33,6 @@ Camera camera(glm::vec3(0.0f, 0.0f, 5.0f));
 float lastX = SCR_WIDTH / 2.0f;
 float lastY = SCR_HEIGHT / 2.0f;
 bool firstMouse = true;
-bool blinn = false;
-bool blinnKeyPressed = false;
 bool isTangent = false;
 bool tangentKeyPressed = false;
 
@@ -43,8 +43,6 @@ float lastFrame = 0.0f;
 
 int main()
 {
-	// glfw: initialize and configure
-	// ------------------------------
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -54,8 +52,6 @@ int main()
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // uncomment this statement to fix compilation on OS X
 #endif
 
-	// glfw window creation
-	// --------------------
 	GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "LearnOpenGL", NULL, NULL);
 	if (window == NULL)
 	{
@@ -69,8 +65,6 @@ int main()
 	glfwSetScrollCallback(window, scroll_callback);
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
-	// glad: load all OpenGL function pointers
-	// ---------------------------------------
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 	{
 		std::cout << "Failed to initialize GLAD" << std::endl;
@@ -79,11 +73,7 @@ int main()
 
 	glEnable(GL_DEPTH_TEST);
 
-	// build and compile our shader program
-	// ------------------------------------
 	Shader shadowShader("shadow_vs.glsl", "shadow_fs.glsl");
-	// set up vertex data (and buffer(s)) and configure vertex attributes
-	// ------------------------------------------------------------------
 
 	unsigned int floorTexture = loadTexture("resources/brickwall.jpg");
 	unsigned int floorNormal = loadTexture("resources/brickwall_normal.jpg");
@@ -92,18 +82,15 @@ int main()
 	shadowShader.setInt("diffuseTexture", 0);
 	shadowShader.setInt("normalMap", 1);
 
+	// 线框模式渲染
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-	// render loop
-	// -----------
+	// 渲染循环
 	while (!glfwWindowShouldClose(window))
 	{
-		// input
-		// -----
+		// 处理输入
 		processInput(window);
 		
-		// render
-		// ------
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -141,23 +128,14 @@ int main()
 
 		std::cout << (isTangent ? "isTangent" : "notTangent") << std::endl;
 
-		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
-		// -------------------------------------------------------------------------------
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
 
-	// optional: de-allocate all resources once they've outlived their purpose:
-	// ------------------------------------------------------------------------
-
-	// glfw: terminate, clearing all previously allocated GLFW resources.
-	// ------------------------------------------------------------------
 	glfwTerminate();
 	return 0;
 }
-
-// process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
-// ---------------------------------------------------------------------------------------------------------
+// 键盘输入
 void processInput(GLFWwindow *window)
 {
 	float cameraSpeed = 2.5f * deltaTime;
@@ -174,16 +152,6 @@ void processInput(GLFWwindow *window)
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
 		camera.ProcessKeyboard(RIGHT, deltaTime);
 
-	if (glfwGetKey(window, GLFW_KEY_B) == GLFW_PRESS && !blinnKeyPressed)
-	{
-		blinn = !blinn;
-		blinnKeyPressed = true;
-	}
-	if (glfwGetKey(window, GLFW_KEY_B) == GLFW_RELEASE)
-	{
-		blinnKeyPressed = false;
-	}
-
 	if (glfwGetKey(window, GLFW_KEY_T) == GLFW_PRESS && !tangentKeyPressed)
 	{
 		isTangent = !isTangent;
@@ -195,16 +163,12 @@ void processInput(GLFWwindow *window)
 		tangentKeyPressed = false;
 	}
 }
-
-// glfw: whenever the window size changed (by OS or user resize) this callback function executes
-// ---------------------------------------------------------------------------------------------
+// 调整窗口大小
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
-	// make sure the viewport matches the new window dimensions; note that width and 
-	// height will be significantly larger than specified on retina displays.
 	glViewport(0, 0, width, height);
 }
-
+// 鼠标输入
 void mouse_callback(GLFWwindow* window, double xpos, double ypos) 
 {
 	if (firstMouse)
@@ -221,12 +185,11 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos)
 
 	camera.ProcessMouseMovement(xoffset, yoffset);
 }
-
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
 	camera.ProcessMouseScroll(yoffset);
 }
-
+// 贴图加载
 unsigned int loadTexture(char const * path)
 {
 	unsigned int textureID;
@@ -274,7 +237,6 @@ void renderScene(const Shader &shader)
 	renderFloor();
 }
 
-// render floor
 unsigned int planeVBO = 0;
 unsigned int planeVAO = 0;
 void renderFloor()
@@ -333,7 +295,6 @@ void renderFloor()
 			pos3.x, pos3.y, pos3.z, nm.x, nm.y, nm.z, uv3.x, uv3.y, tangent2.x, tangent2.y, tangent2.z,
 			pos4.x, pos4.y, pos4.z, nm.x, nm.y, nm.z, uv4.x, uv4.y, tangent2.x, tangent2.y, tangent2.z
 		};
-
 
 		glGenVertexArrays(1, &planeVAO);
 		glGenBuffers(1, &planeVBO);
