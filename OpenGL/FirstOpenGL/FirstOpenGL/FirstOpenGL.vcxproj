@@ -24,19 +24,15 @@
     <ClCompile Include="stb_image.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="fb_fs.glsl" />
-    <None Include="fb_vs.glsl" />
-    <None Include="house_fs.glsl" />
-    <None Include="house_vs.glsl">
-      <FileType>Document</FileType>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="..\include\camera.h" />
     <ClInclude Include="..\include\mesh.h" />
     <ClInclude Include="..\include\model.h" />
     <ClInclude Include="..\include\shader.h" />
     <ClInclude Include="..\include\stb_image.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="shadow_fs.glsl" />
+    <None Include="shadow_vs.glsl" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

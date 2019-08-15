@@ -26,20 +26,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="house_vs.glsl">
-      <Filter>Source Files</Filter>
-    </None>
-    <None Include="house_fs.glsl">
-      <Filter>Source Files</Filter>
-    </None>
-    <None Include="fb_fs.glsl">
-      <Filter>Source Files</Filter>
-    </None>
-    <None Include="fb_vs.glsl">
-      <Filter>Source Files</Filter>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="..\include\camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -55,5 +41,13 @@
     <ClInclude Include="..\include\mesh.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="shadow_fs.glsl">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="shadow_vs.glsl">
+      <Filter>Source Files</Filter>
+    </None>
   </ItemGroup>
 </Project>
