@@ -11,11 +11,31 @@ in VS_OUT {
 
 uniform sampler2D diffuseTexture;
 uniform sampler2D normalMap;
+uniform sampler2D parallaxMap;
+
+uniform float heightScale;
+uniform bool isParallax;
+
+vec2 ParallaxMapping(vec2 texCoords, vec3 viewDir)
+{ 
+    float height = texture(parallaxMap, texCoords).r;
+    vec2 offset = viewDir.xy / viewDir.z * (height * heightScale); 
+    return texCoords - offset;
+}
 
 void main()
 {   
-    vec3 color = texture(diffuseTexture, fs_in.TexCoords).rgb;
-    vec3 normal = texture(normalMap, fs_in.TexCoords).rgb;
+	vec3 viewDir = normalize(fs_in.TangentViewPos - fs_in.TangentFragPos);
+	vec2 texCoords = fs_in.TexCoords;
+	if (isParallax)
+	{
+		texCoords = ParallaxMapping(fs_in.TexCoords, viewDir);
+	}
+	if(texCoords.x > 1.0 || texCoords.y > 1.0 || texCoords.x < 0.0 || texCoords.y < 0.0)
+		discard;
+    vec3 color = texture(diffuseTexture, texCoords).rgb;
+    vec3 normal = texture(normalMap, texCoords).rgb;
+
     // 从贴图[0,1]转换为法线[-1,1]
 	normal = normalize(normal * 2.0 - 1.0);
 
@@ -25,7 +45,6 @@ void main()
     float diff = max(dot(lightDir, normal), 0.0);
     vec3 diffuse = diff * lightColor;
 
-    vec3 viewDir = normalize(fs_in.TangentViewPos - fs_in.TangentFragPos);
     vec3 reflectDir = reflect(-lightDir, normal);
     float spec = 0.8;
     vec3 halfwayDir = normalize(lightDir + viewDir);  

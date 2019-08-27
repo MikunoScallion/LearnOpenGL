@@ -1,6 +1,4 @@
-﻿// 按T在物体空间和切线空间切换
-
-#include <glad/glad.h>
+﻿#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <stb_image.h>
 #include <glm/glm.hpp>
@@ -33,9 +31,10 @@ Camera camera(glm::vec3(0.0f, 0.0f, 5.0f));
 float lastX = SCR_WIDTH / 2.0f;
 float lastY = SCR_HEIGHT / 2.0f;
 bool firstMouse = true;
-bool isTangent = false;
-bool tangentKeyPressed = false;
+bool parallaxKeyPressed = false;
+bool isParallax = false;
 
+float heightScale = 0.1f;
 float percent = 0.5;
 
 float deltaTime = 0.0f;
@@ -75,12 +74,14 @@ int main()
 
 	Shader shadowShader("shadow_vs.glsl", "shadow_fs.glsl");
 
-	unsigned int floorTexture = loadTexture("resources/brickwall.jpg");
-	unsigned int floorNormal = loadTexture("resources/brickwall_normal.jpg");
+	unsigned int floorTexture = loadTexture("resources/bricks2.jpg");
+	unsigned int floorNormal = loadTexture("resources/bricks2_normal.jpg");
+	unsigned int floorParallax = loadTexture("resources/bricks2_disp.jpg");
 
 	shadowShader.use();
 	shadowShader.setInt("diffuseTexture", 0);
 	shadowShader.setInt("normalMap", 1);
+	shadowShader.setInt("parallaxMap", 2);
 
 	// 线框模式渲染
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -115,18 +116,23 @@ int main()
 		glm::mat4 view = camera.GetViewMatrix();
 		shadowShader.setMat4("projection", projection);
 		shadowShader.setMat4("view", view);
-		shadowShader.setBool("isTangent", isTangent);
 		
 		shadowShader.setVec3("viewPos", camera.Position);
 		shadowShader.setVec3("lightPos", lightPos);
 		shadowShader.setMat4("lightSpaceMatrix", lightSpaceMatrix);
+		shadowShader.setFloat("heightScale", heightScale);
+		shadowShader.setBool("isParallax", isParallax);
+
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, floorTexture);
 		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_2D, floorNormal);
+		glActiveTexture(GL_TEXTURE2);
+		glBindTexture(GL_TEXTURE_2D, floorParallax);
 		renderScene(shadowShader);
 
-		std::cout << (isTangent ? "isTangent" : "notTangent") << std::endl;
+		std::cout << (isParallax ? "isParallax" : "notParallax") << std::endl;
+		std::cout << heightScale << std::endl;
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
@@ -152,15 +158,14 @@ void processInput(GLFWwindow *window)
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
 		camera.ProcessKeyboard(RIGHT, deltaTime);
 
-	if (glfwGetKey(window, GLFW_KEY_T) == GLFW_PRESS && !tangentKeyPressed)
+	if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS && !parallaxKeyPressed) 
 	{
-		isTangent = !isTangent;
-		tangentKeyPressed = true;
-		
+		isParallax = !isParallax;
+		parallaxKeyPressed = true;
 	}
-	if (glfwGetKey(window, GLFW_KEY_T) == GLFW_RELEASE)
+	if (glfwGetKey(window, GLFW_KEY_P) == GLFW_RELEASE) 
 	{
-		tangentKeyPressed = false;
+		parallaxKeyPressed = false;
 	}
 }
 // 调整窗口大小
@@ -232,7 +237,7 @@ void renderScene(const Shader &shader)
 	// floor
 	glm::mat4 model = glm::mat4(1.0f);
 	model = glm::translate(model, lightPos);
-	model = glm::rotate(model, (float)glfwGetTime() * glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f));
+	//model = glm::rotate(model, (float)glfwGetTime() * glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f));
 	shader.setMat4("model", model);
 	renderFloor();
 }

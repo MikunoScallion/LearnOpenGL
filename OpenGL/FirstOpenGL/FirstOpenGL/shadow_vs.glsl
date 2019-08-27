@@ -22,8 +22,6 @@ uniform mat4 lightSpaceMatrix;
 uniform vec3 lightPos;
 uniform vec3 viewPos;
 
-uniform bool isTangent;
-
 void main()
 {
 	vec3 T = normalize(vec3(model * vec4(aTangent, 0.0)));
@@ -38,18 +36,9 @@ void main()
     vs_out.TexCoords = aTexCoords;
     vs_out.FragPosLightSpace = lightSpaceMatrix * vec4(vs_out.TangentFragPos, 1.0);
 
-	if (isTangent)
-	{
-		vs_out.TangentFragPos = TBN * vec3(model * vec4(aPos, 1.0));
-		vs_out.TangentLightPos = TBN * lightPos;
-		vs_out.TangentViewPos = TBN * viewPos;
-	}
-	else if (!isTangent)
-	{
-		vs_out.TangentFragPos = vec3(model * vec4(aPos, 1.0));
-		vs_out.TangentLightPos = lightPos;
-		vs_out.TangentViewPos = viewPos;
-	}
-	
+	vs_out.TangentFragPos = TBN * vec3(model * vec4(aPos, 1.0));
+	vs_out.TangentLightPos = TBN * lightPos;
+	vs_out.TangentViewPos = TBN * viewPos;	
+
     gl_Position = projection * view * model * vec4(aPos, 1.0);
 }
