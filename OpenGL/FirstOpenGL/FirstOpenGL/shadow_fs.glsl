@@ -18,9 +18,24 @@ uniform bool isParallax;
 
 vec2 ParallaxMapping(vec2 texCoords, vec3 viewDir)
 { 
-    float height = texture(parallaxMap, texCoords).r;
-    vec2 offset = viewDir.xy / viewDir.z * (height * heightScale); 
-    return texCoords - offset;
+    float layerNum = 10;
+    float deltaDepth = 1.0f / layerNum;
+
+    vec2 p = viewDir.xy * heightScale; 
+    vec2 deltaTexcoords = p / layerNum;
+
+	float currentDepth = 0.0f;
+    vec2 currentTexcoords = texCoords;
+    float currentParaMapDepth = texture(parallaxMap, currentTexcoords).r;
+
+    while(currentDepth < currentParaMapDepth)
+    {
+        currentDepth += deltaDepth;
+        currentTexcoords -= deltaTexcoords;
+        currentParaMapDepth = texture(parallaxMap, currentTexcoords).r;
+    }
+
+    return currentTexcoords;
 }
 
 void main()
