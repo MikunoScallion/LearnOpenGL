@@ -35,7 +35,17 @@ vec2 ParallaxMapping(vec2 texCoords, vec3 viewDir)
         currentParaMapDepth = texture(parallaxMap, currentTexcoords).r;
     }
 
-    return currentTexcoords;
+	vec2 beforeTexcoords = currentTexcoords + deltaTexcoords;
+	// nagetive
+	float afterHeight = currentParaMapDepth - currentDepth;
+	// positive
+	float beforeHeight = texture(parallaxMap, beforeTexcoords).r - (currentDepth - deltaDepth);
+	// - / ((-) - (+)) = - / - = +
+	float weight = afterHeight / (afterHeight - beforeHeight);
+	// lerp
+	vec2 finalTexcoords = beforeTexcoords * weight +  currentTexcoords * (1.0f - weight);
+
+    return finalTexcoords;
 }
 
 void main()

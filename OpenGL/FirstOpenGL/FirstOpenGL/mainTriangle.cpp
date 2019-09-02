@@ -1,4 +1,6 @@
-﻿#include <glad/glad.h>
+﻿//按下P开启/关闭parallax mapping
+
+#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <stb_image.h>
 #include <glm/glm.hpp>
@@ -137,7 +139,6 @@ int main()
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
-
 	glfwTerminate();
 	return 0;
 }
