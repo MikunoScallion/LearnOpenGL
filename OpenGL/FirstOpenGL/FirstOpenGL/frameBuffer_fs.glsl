@@ -3,39 +3,64 @@ out vec4 FragColor;
 
 in vec2 TexCoords;
 
-uniform sampler2D screenTexture;
+uniform sampler2D hdrBuffer;
+uniform bool hdr;
+uniform float exposure;
 
-const float offset = 1.0 / 300.0;  
+vec3 ReinhardToneMapping(vec3 color, float adapted_lum) 
+{
+    const float MIDDLE_GREY = 1;
+    color *= MIDDLE_GREY / adapted_lum;
+    return color / (1.0f + color);
+}
+
+vec3 CEToneMapping(vec3 color, float adapted_lum) 
+{
+    return 1 - exp(-adapted_lum * color);
+}
+
+vec3 F(vec3 x)
+{
+	const float A = 0.22f;
+	const float B = 0.30f;
+	const float C = 0.10f;
+	const float D = 0.20f;
+	const float E = 0.01f;
+	const float F = 0.30f;
+ 
+	return ((x * (A * x + C * B) + D * E) / (x * (A * x + B) + D * F)) - E / F;
+}
+
+vec3 Uncharted2ToneMapping(vec3 color, float adapted_lum)
+{
+	const vec3 WHITE = vec3(11.2f);
+	return F(1.6f * adapted_lum * color) / F(WHITE);
+}
+
+vec3 ACESToneMapping(vec3 color, float adapted_lum)
+{
+	const float A = 2.51f;
+	const float B = 0.03f;
+	const float C = 2.43f;
+	const float D = 0.59f;
+	const float E = 0.14f;
+
+	color *= adapted_lum;
+	return (color * (A * color + B)) / (color * (C * color + D) + E);
+}
 
 void main()
-{
-	vec2 offsets[9] = vec2[](
-        vec2(-offset,  offset), 
-        vec2( 0.0f,    offset),
-        vec2( offset,  offset), 
-        vec2(-offset,  0.0f),   
-        vec2( 0.0f,    0.0f),  
-        vec2( offset,  0.0f), 
-        vec2(-offset, -offset), 
-        vec2( 0.0f,   -offset), 
-        vec2( offset, -offset)
-    );
-
-    float kernel[9] = float[](
-    1.0 , 1.0 , 1.0,
-    1.0 , -8.0 , 1.0,
-    1.0 , 1.0 , 1.0  
-	);
-
-	vec3 sampleTex[9];
-    for(int i = 0; i < 9; i++)
+{             
+    const float gamma = 2.2;
+    vec3 hdrColor = texture(hdrBuffer, TexCoords).rgb;
+    if(hdr)
     {
-        sampleTex[i] = vec3(texture(screenTexture, TexCoords.st + offsets[i]));
+        vec3 result = ACESToneMapping(hdrColor, exposure);
+        FragColor = vec4(result, 1.0);
     }
-
-    vec3 col = vec3(0.0);
-    for(int i = 0; i < 9; i++)
-        col += sampleTex[i] * kernel[i];
-	
-    FragColor = vec4(col, 1.0);
-} 
+    else
+    {
+        vec3 result = pow(hdrColor, vec3(1.0 / gamma));
+        FragColor = vec4(result, 1.0);
+    }
+}
