@@ -93,8 +93,8 @@
     <LibraryPath>..\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>D:\Documents\GitLab\jtian_unity\OpenGL\FirstOpenGL\FirstOpenGL;D:\Software\glfw-3.3\include;D:\Software\glm;$(IncludePath)</IncludePath>
-    <LibraryPath>D:\Software\glfw-3.3\build\src\Debug;$(LibraryPath)</LibraryPath>
+    <IncludePath>..\include;$(IncludePath)</IncludePath>
+    <LibraryPath>..\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
